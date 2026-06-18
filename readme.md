@@ -1,10 +1,10 @@
 # Examination of several Latest "SLAM"/reconstruction systems in robot exploration mode
 ## 👥 Test Subjects:
-✅[Mast3r-SLAM](https://github.com/rmurai0610/MASt3R-SLAM) 
-✅[DA3-Streaming](https://github.com/ByteDance-Seed/Depth-Anything-3/blob/main/da3_streaming/README.md)
+- ✅[Mast3r-SLAM](https://github.com/rmurai0610/MASt3R-SLAM) 
+- ✅[DA3-Streaming](https://github.com/ByteDance-Seed/Depth-Anything-3/blob/main/da3_streaming/README.md)
 
-🎯VGGT-SLAM
-🎯VGGT-Long
+- 🎯VGGT-SLAM
+- 🎯VGGT-Long
 
 ## brief contrast
 <figure>
@@ -14,22 +14,22 @@
 
 <figure>
   <img src="./da3_video.png" alt="DepthAnything3 Video" width="100%">
-  <figcaption style="text-align: center;">Depth-Anything-3 Video Result</figcaption>
+  <figcaption style="text-align: center;">Depth-Anything-3 streaming Video Result</figcaption>
 </figure>
 
 ## visualization (by yourself)
 The result ply pointcloud and input video is [here in google drive](https://drive.google.com/drive/folders/1SfVfq0hAM5SD_vkz78YnghIhMG5KsTi6?usp=drive_link) or [here in aliyun drive](https://www.alipan.com/s/2nt3dkeBV3Z), you can download it and use the ``visualize_ply.py`` to visualize the result on your device.
 ## input modality
-We examinates two modality: images and video
+We examinates two modality: image and video
 
 ## data collector
 ### 📸image modality
-The images are taken from Unitree Go2 robot at its height.
+The images are taken from Unitree Go2 robot via realsense D435i 480x640 at its height.
 The robot will take an image after it stabilizes, and then it moves.
 This approach is more real-world application related. 
 ### 🎥video
 The video is recorded with a cellphone camera at human height.
-Since this modality is more similar to their training data, it is assumed to have better performance. 
+Since this modality is more similar to their training data, it is assumed to have better performance. The video footage captured by the robot is heavily compromised by visual noise caused by camera shake during movement.
 
 However, there are some differences compared to "dataset videos":
 - The **camera rotates frequently** to mimic robot "exploring/navigating" in real-world scenarios rather than going straight and following building structure 
