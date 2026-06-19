@@ -17,6 +17,25 @@
   <figcaption style="text-align: center;">Depth-Anything-3 streaming Video Result</figcaption>
 </figure>
 
+### DA3 shared-frame registration point-cloud mapping
+
+The following Depth Anything 3 (DA3) results use shared-frame registration with
+Sim(3) alignment. The first map retains the floor, while the second removes floor
+points and excludes them from the registration information.
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="./da3_imgs_sharedFrameReg_sim3.png" alt="Shared-frame registration point-cloud map with floor" width="100%"><br>
+      <strong>Floor retained</strong>
+    </td>
+    <td align="center" width="50%">
+      <img src="./da3_imgs_sharedFrameReg_sim3FloorRemoved.png" alt="Shared-frame registration point-cloud map with floor removed and excluded from registration" width="100%"><br>
+      <strong>Floor removed and excluded from registration</strong>
+    </td>
+  </tr>
+</table>
+
 ## visualization (by yourself)
 The result ply pointcloud and input video is [here in google drive](https://drive.google.com/drive/folders/1SfVfq0hAM5SD_vkz78YnghIhMG5KsTi6?usp=drive_link) or [here in aliyun drive](https://www.alipan.com/s/2nt3dkeBV3Z), you can download it and use the ``visualize_ply.py`` to visualize the result on your device.
 ## input modality
