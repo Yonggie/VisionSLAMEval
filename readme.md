@@ -20,8 +20,32 @@
 ### DA3 shared-frame registration point-cloud mapping
 
 The following Depth Anything 3 (DA3) results use shared-frame registration with
-Sim(3) alignment. The first map retains the floor, while the second removes floor
-points and excludes them from the registration information.
+different alignment and fusion strategies.
+
+#### Method overview
+
+1. The robot first rotates in place. The initial 12-frame DA3 batch builds the
+   baseline map; subsequent reconstruction uses 5-frame sliding windows. DA3
+   provides depth, confidence, camera parameters, and a local point cloud.
+2. The detected floor is aligned with the +Y axis and is either retained or removed
+   before registration.
+3. Adjacent batches share four frames. The best three are selected dynamically, and
+   their pixel-aligned 3D correspondences provide the coarse transform. SE(3)
+   estimates rotation and translation, while Sim(3) also corrects limited scale drift.
+4. Bounded ICP against the active submap refines the transform. Shared-frame error,
+   ICP fitness/RMSE, pose increments, and provisional-chain depth gate unreliable
+   registrations.
+5. Standard fusion appends and downsamples new points. Conservative fusion instead
+   classifies voxels as accepted, duplicate, or conflict, discards conflicts, and
+   uses a scale-shadow gate to isolate suspicious wall geometry.
+6. Batch-to-local poses form each submap; qualified submaps are then linked into the
+   global map. DA3 scale drift and local geometric errors can still cause missing
+   regions, tracking loss, or incorrect poses.
+
+#### Sim(3) alignment
+
+The first map retains the floor, while the second removes floor points and excludes
+them from the registration information.
 
 <table>
   <tr>
@@ -32,6 +56,24 @@ points and excludes them from the registration information.
     <td align="center" width="50%">
       <img src="./da3_imgs_sharedFrameReg_sim3FloorRemoved.png" alt="Shared-frame registration point-cloud map with floor removed and excluded from registration" width="100%"><br>
       <strong>Floor removed and excluded from registration</strong>
+    </td>
+  </tr>
+</table>
+
+#### SE(3) alignment
+
+The first map uses standard SE(3) registration, while the second uses SE(3)
+registration with conservative fusion.
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="./da3_imgs_sharedFrameReg_se3.png" alt="DA3 shared-frame point-cloud mapping with SE(3) registration" width="100%"><br>
+      <strong>SE(3) registration</strong>
+    </td>
+    <td align="center" width="50%">
+      <img src="./da3_imgs_sharedFrameReg_se3Conservative.png" alt="DA3 shared-frame point-cloud mapping with SE(3) registration and conservative fusion" width="100%"><br>
+      <strong>SE(3) registration with conservative fusion</strong>
     </td>
   </tr>
 </table>
