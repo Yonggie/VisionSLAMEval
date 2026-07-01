@@ -2,9 +2,9 @@
 ## 👥 Test Subjects:
 - ✅[Mast3r-SLAM](https://github.com/rmurai0610/MASt3R-SLAM) 
 - ✅[DA3-Streaming](https://github.com/ByteDance-Seed/Depth-Anything-3/blob/main/da3_streaming/README.md)
-
-- 🎯VGGT-SLAM
-- 🎯VGGT-Long
+- ✅[DA3 shared-frame](https://github.com/DIO-KONG/PCR/tree/da3%2BPCR) (Self designed SLAM)
+- ✅[VGGT-SLAM](https://github.com/MIT-SPARK/VGGT-SLAM)
+- ✅[VGGT-Long](https://github.com/DengKaiCQ/VGGT-Long)
 
 ## brief contrast
 <figure>
@@ -149,6 +149,16 @@ capacity and low inference resolution.
     </td>
   </tr>
 </table>
+
+#### VGGT-LONG original pipeline on Alibaba Cloud A10 ECS
+
+A separate video reconstruction was also tested on an Alibaba Cloud A10 ECS using
+the original VGGT pipeline.
+
+<figure>
+  <img src="./VGGT-LONG_original.png" alt="VGGT-LONG original pipeline reconstructed point cloud on Alibaba Cloud A10 ECS" width="100%">
+  <figcaption style="text-align: center;">VGGT-LONG original pipeline reconstruction on Alibaba Cloud A10 ECS</figcaption>
+</figure>
 
 ## visualization (by yourself)
 The result ply pointcloud and input video is [here in google drive](https://drive.google.com/drive/folders/1SfVfq0hAM5SD_vkz78YnghIhMG5KsTi6?usp=drive_link) or [here in aliyun drive](https://www.alipan.com/s/2nt3dkeBV3Z), you can download it and use the ``visualize_ply.py`` to visualize the result on your device.
