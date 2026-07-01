@@ -2,9 +2,9 @@
 ## 👥 Test Subjects:
 - ✅[Mast3r-SLAM](https://github.com/rmurai0610/MASt3R-SLAM) 
 - ✅[DA3-Streaming](https://github.com/ByteDance-Seed/Depth-Anything-3/blob/main/da3_streaming/README.md)
-
-- 🎯VGGT-SLAM
-- 🎯VGGT-Long
+- ✅[DA3 shared-frame](https://github.com/DIO-KONG/PCR/tree/da3%2BPCR) (Self designed SLAM)
+- ✅[VGGT-SLAM](https://github.com/MIT-SPARK/VGGT-SLAM)
+- ✅[VGGT-Long](https://github.com/DengKaiCQ/VGGT-Long)
 
 ## brief contrast
 <figure>
@@ -77,6 +77,88 @@ registration with conservative fusion.
     </td>
   </tr>
 </table>
+
+### VGGT-SLAM and VGGT-LONG official pipeline results
+
+These results were reproduced with the official workflows of VGGT-SLAM and
+VGGT-LONG. VGGT-SLAM uses a 327-image sequence as input. VGGT-LONG takes the
+video input and internally extracts image frames, so the reconstruction input is
+also image-based in practice.
+
+#### VGGT-SLAM
+
+VGGT-SLAM was tested with 327 input images. Changing the main reconstruction
+parameters did not resolve the failure cases:
+
+```bash
+python main.py --image_folder data/Scene1 --max_loops 1 --vis_map \
+  --conf_threshold 10 \
+  --min_disparity 25 \
+  --submap_size 12
+```
+
+- `--conf_threshold 10`: filters only the worst 10% points and keeps more points.
+- `--min_disparity 25`: lowers the keyframe trigger threshold for denser sampling.
+- `--submap_size 12`: performs local optimization more frequently.
+
+Observed issue: the GFM (Geometric Foundation Model) shows depth explosion,
+which leads to obvious SLAM pose drift. The fused point cloud is also too sparse
+for reliable map construction in this robot exploration setting.
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="./VGGT-SLAM_view1.png" alt="VGGT-SLAM reconstructed point cloud view 1" width="100%"><br>
+      <strong>VGGT-SLAM reconstruction view 1</strong>
+    </td>
+    <td align="center" width="50%">
+      <img src="./VGGT-SLAM_view2.png" alt="VGGT-SLAM reconstructed point cloud view 2" width="100%"><br>
+      <strong>VGGT-SLAM reconstruction view 2</strong>
+    </td>
+  </tr>
+</table>
+
+#### VGGT-LONG with 8GB GPU limit
+
+VGGT-LONG could not run with the default GFM under the available GPU memory
+limit because of OOM. Therefore, Pi3 (As Recommended in VGGT-LONG repo README) was used as the GFM.
+
+| Parameter | Value |
+| --- | --- |
+| Base model | Pi3 (3.6 GB) |
+| Input video | 1280x720, 30 fps, 74 s |
+| Extracted frames | 369 frames @ 5 fps |
+| `chunk_size` | 25, adapted for 8GB GPU memory |
+| Inference resolution | 490x280 (`pixel_limit=140000`) |
+| Total chunks | 28, with overlap |
+| Loop detection | SALAD, no loop detected |
+
+Observed issue: due to the memory limit, VGGT-LONG can only use the lighter Pi3
+GFM in this test. The reconstruction is therefore constrained by reduced model
+capacity and low inference resolution.
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="./VGGT-LONG_8G_view1.png" alt="VGGT-LONG 8GB reconstructed point cloud view 1" width="100%"><br>
+      <strong>VGGT-LONG 8GB reconstruction view 1</strong>
+    </td>
+    <td align="center" width="50%">
+      <img src="./VGGT-LONG_8G_view2.png" alt="VGGT-LONG 8GB reconstructed point cloud view 2" width="100%"><br>
+      <strong>VGGT-LONG 8GB reconstruction view 2</strong>
+    </td>
+  </tr>
+</table>
+
+#### VGGT-LONG original pipeline on Alibaba Cloud A10 ECS
+
+A separate video reconstruction was also tested on an Alibaba Cloud A10 ECS using
+the original VGGT pipeline.
+
+<figure>
+  <img src="./VGGT-LONG_original.png" alt="VGGT-LONG original pipeline reconstructed point cloud on Alibaba Cloud A10 ECS" width="100%">
+  <figcaption style="text-align: center;">VGGT-LONG original pipeline reconstruction on Alibaba Cloud A10 ECS</figcaption>
+</figure>
 
 ## visualization (by yourself)
 The result ply pointcloud and input video is [here in google drive](https://drive.google.com/drive/folders/1SfVfq0hAM5SD_vkz78YnghIhMG5KsTi6?usp=drive_link) or [here in aliyun drive](https://www.alipan.com/s/2nt3dkeBV3Z), you can download it and use the ``visualize_ply.py`` to visualize the result on your device.
